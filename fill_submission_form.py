@@ -22,18 +22,18 @@ def create_overlay():
     # =========================================================================
     c.setFont("Helvetica-Bold", 14)
     c.setFillColor(colors.HexColor("#0284c7")) # Vibrant cyan/blue
-    c.drawString(210, 222, "Trailblazer")
+    c.drawString(210, 222, "TrailBlazer")
 
     c.setFillColor(colors.HexColor("#0f172a")) # Charcoal dark
     c.drawString(210, 191, "Tenali Radhika")
 
-    c.setFont("Helvetica-Bold", 12)
+    c.setFont("Helvetica-Bold", 13)
     c.setFillColor(colors.HexColor("#334155"))
-    c.drawString(210, 158, "1 (Individual Developer / Solo — India GCC Community)")
+    c.drawString(210, 158, "2")
 
     c.setFont("Helvetica-Bold", 11)
     c.setFillColor(colors.HexColor("#0369a1"))
-    c.drawString(210, 126, "Supply Chain Ontology and Governed Conversational Analytics (Track 5)")
+    c.drawString(210, 126, "Supply Chain Ontology and Governed Conversational Analytics")
     c.showPage()
 
     # =========================================================================

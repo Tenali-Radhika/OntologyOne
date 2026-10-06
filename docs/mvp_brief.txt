@@ -1,0 +1,6 @@
+OntologyOne by Team TrailBlazer delivers governed conversational analytics for enterprise GCC supply chains. When teams query data with row-level security, metrics diverge across dashboards (Procurement 94%, Logistics 89%, Planning 92%). We solve this RAP Paradox with our Two-Tier Truth Architecture:
+1. Unified Aggregate Truth: A pre-aggregated certified mart (MART_OTD_AGGREGATE) guarantees identical company KPIs (91.4% = 91.4% = 91.4%) across all personas.
+2. Entitled Granular Lineage: Base tables enforce Snowflake Row Access Policies and Dynamic Cost Masking (***CONFIDENTIAL***).
+
+Built on Snowflake CoCo CLI, Cortex Agent orchestrates Cortex Analyst over semantic view SUPPLY_SEMANTIC.sv.yaml, Cortex Search over legal SLAs, and Dynamic Tables (1-min lag). Our Truth Compiler pinpoints root-cause delays to Supplier S-017 and shipment SH-93821 with document evidence and AI recommendations.
+Validated by an automated 12/12 test suite and a 5-screen Streamlit Command Center with Judge Room.
