@@ -1,8 +1,8 @@
-"""
-OntologyOne - Production Standalone Streamlit App for Snowflake (SiS)
-Team TrailBlazer (Tenali Radhika) — Track: Supply Chain Ontology & Conversational Analytics
-100% Self-Contained: Zero external package dependencies beyond standard Streamlit and Pandas.
-"""
+# =============================================================================
+# OntologyOne - Production Standalone Streamlit App for Snowflake (SiS)
+# Team TrailBlazer (Tenali Radhika) — Track: Supply Chain Ontology & Conversational Analytics
+# 100% Self-Contained: Zero external package dependencies beyond standard Streamlit and Pandas.
+# =============================================================================
 
 import streamlit as st
 import pandas as pd
@@ -538,18 +538,24 @@ elif screen_choice == "3. Ontology Explorer":
     st.markdown("## 🕸️ Supply Chain Ontology Explorer")
     st.markdown("Topology mapping the 6 MVP entities, relationships, and metric contracts:")
 
-    st.markdown(
-        """
-```mermaid
-graph LR
-    SUPPLIER[SUPPLIER<br>50 Vendors] -->|supplies| PART[PART<br>200 SKUs]
-    PART -->|ordered_in| ORDER_LINE[ORDER_LINE<br>15,000 Lines]
-    PLANT[PLANT<br>12 Hubs] -->|fulfills| ORDER_LINE
-    CUSTOMER[CUSTOMER<br>500 Accounts] -->|places| ORDER_LINE
-    ORDER_LINE -->|shipped_via| SHIPMENT[SHIPMENT<br>15,000 Freight Moves]
-```
-        """
+    topology_html = (
+        "<div style='background:#1e293b; padding:18px; border-radius:12px; border:1px solid #334155; margin-bottom:15px; font-family:monospace;'>"
+        "<div style='display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:8px;'>"
+        "<span style='background:#0284c7; color:#fff; padding:6px 14px; border-radius:6px; font-weight:700;'>SUPPLIER (50)</span>"
+        "<span style='color:#38bdf8;'>──supplies──▶</span>"
+        "<span style='background:#0d9488; color:#fff; padding:6px 14px; border-radius:6px; font-weight:700;'>PART (200)</span>"
+        "<span style='color:#2dd4bf;'>──ordered_in──▶</span>"
+        "<span style='background:#6366f1; color:#fff; padding:6px 14px; border-radius:6px; font-weight:700;'>ORDER_LINE (15k)</span>"
+        "<span style='color:#818cf8;'>──shipped_via──▶</span>"
+        "<span style='background:#d97706; color:#fff; padding:6px 14px; border-radius:6px; font-weight:700;'>SHIPMENT (15k)</span>"
+        "</div>"
+        "<div style='display:flex; justify-content:center; gap:30px; margin-top:12px; font-size:12px;'>"
+        "<span style='color:#94a3b8;'>PLANT (12 Facilities) ──fulfills──▶ ORDER_LINE</span>"
+        "<span style='color:#94a3b8;'>CUSTOMER (500 Accounts) ──places──▶ ORDER_LINE</span>"
+        "</div>"
+        "</div>"
     )
+    st.markdown(topology_html, unsafe_allow_html=True)
     st.markdown("---")
     entity_dict = {
         "SUPPLIER": ("50 Vendors", "supplier_id", "SUPPLIER supplies PART (1:N)", "Supplier name protected; cost data restricted."),
@@ -668,19 +674,24 @@ elif screen_choice == "5. Hackathon Judge Room ⚖️":
             if st.button("Gate 4: Verify S5 Cost Masking (***CONFIDENTIAL***)", use_container_width=True):
                 st.info("MASKING ENFORCED: GOV.MASK_COST_DATA redacted unit_cost for ONTO_LOGISTICS persona; violation logged.")
 
-    with t2:
-        st.markdown(
-            """
-> **[0:00 - The Hook]**  
-> *"Good day judges. In every enterprise GCC, executive dashboards report conflicting truths. Ask three department heads 'What is our On-Time Delivery rate?' and Procurement says 94%, Logistics says 89%, and Planning says 92%. When row-level security is applied, standard LLM queries calculate different numbers. We call this the RAP Paradox."*
->
-> **[0:40 - The Breakthrough]**  
-> *"Team TrailBlazer built OntologyOne to solve this permanently. Our thesis: Same question, same governed metric, same calculation, same answer, different authorized context. We introduced the Two-Tier Truth Architecture: Unified Aggregate Truth in a certified mart where Q3 OTD is invariant at 91.4% across all personas, coupled with Entitled Granular Lineage for compliant drill-downs."*
->
-> **[1:15 - The Snowflake AI Stack]**  
-> *"Powered by Snowflake Cortex Agent, Cortex Analyst, and Cortex Search, our Truth Compiler translates natural language into verified semantic view SQL. When investigating why OTD fell, it doesn't just calculate a number—it decomposes the ontology to Supplier S-017, pinpoints 428 late shipments, cites the Dresden Fab wafer delay in SLA clause §4.2, and presents labeled AI recommendations."*
->
-> **[1:45 - The Closer]**  
-> *"Our test suite passes 12 out of 12 governance gates. We didn't teach an AI what the truth is. We gave the AI a governed definition of truth. We are Team TrailBlazer. Thank you."*
-            """
+        pitch_text = (
+            "> **[0:00 - The Hook]**\n"
+            "> 'Good day judges. In every enterprise GCC, executive dashboards report conflicting truths. "
+            "Ask three department heads \"What is our On-Time Delivery rate?\" and Procurement says 94%, "
+            "Logistics says 89%, and Planning says 92%. When row-level security is applied, standard LLM queries "
+            "calculate different numbers. We call this the RAP Paradox.'\n>\n"
+            "> **[0:40 - The Breakthrough]**\n"
+            "> 'Team TrailBlazer built OntologyOne to solve this permanently. Our thesis: Same question, same governed metric, "
+            "same calculation, same answer, different authorized context. We introduced the Two-Tier Truth Architecture: "
+            "Unified Aggregate Truth in a certified mart where Q3 OTD is invariant at 91.4% across all personas, coupled with "
+            "Entitled Granular Lineage for compliant drill-downs.'\n>\n"
+            "> **[1:15 - The Snowflake AI Stack]**\n"
+            "> 'Powered by Snowflake Cortex Agent, Cortex Analyst, and Cortex Search, our Truth Compiler translates natural "
+            "language into verified semantic view SQL. When investigating why OTD fell, it does not just calculate a number—it decomposes "
+            "the ontology to Supplier S-017, pinpoints 428 late shipments, cites the Dresden Fab wafer delay in SLA clause Section 4.2, "
+            "and presents labeled AI recommendations.'\n>\n"
+            "> **[1:45 - The Closer]**\n"
+            "> 'Our test suite passes 12 out of 12 governance gates. We did not teach an AI what the truth is. "
+            "We gave the AI a governed definition of truth. We are Team TrailBlazer. Thank you.'"
         )
+        st.markdown(pitch_text)
