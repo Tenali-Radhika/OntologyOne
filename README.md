@@ -1,13 +1,12 @@
 # ONTOLOGYONE ⚡
-
 ### Governed Supply Chain Ontology & Conversational Analytics
-
-**Snowflake CoCo CLI Hackathon (GCC Edition) — Track 5**
+**Snowflake CoCo CLI Hackathon (GCC Edition) — Track 5**  
+**Team Trailblazer** | **Lead: Tenali Radhika**
 
 [![Governance Test Suite](https://img.shields.io/badge/Governance%20Audit-12%2F12%20PASSED-emerald?style=for-the-badge&logo=snowflake)](tests/run_suite.py)
+[![Team](https://img.shields.io/badge/Team-Trailblazer-orange?style=for-the-badge)](README.md)
 [![Cortex Agent](https://img.shields.io/badge/Snowflake%20Cortex-Arctic%20Enabled-blue?style=for-the-badge)](cortex-project.yml)
 [![Truth Compiler](https://img.shields.io/badge/Truth%20Compiler-Active-purple?style=for-the-badge)](docs/architecture.md)
-[![License](https://img.shields.io/badge/License-Apache%202.0-lightgrey?style=for-the-badge)](LICENSE)
 
 ---
 

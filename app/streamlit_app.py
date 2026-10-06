@@ -12,6 +12,7 @@ import time
 from app.command_center import render_command_center
 from app.ontology_explorer import render_ontology_explorer
 from app.lineage import render_trust_and_lineage
+from app.judge_room import render_judge_room
 from app.evidence import get_evidence_for_query
 
 # -----------------------------------------------------------------------------
@@ -153,8 +154,15 @@ st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 with st.sidebar:
     st.markdown("### ⚡ ONTOLOGYONE")
     st.markdown(
-        "<span style='color:#38bdf8; font-size:12px; font-weight:700;'>SNOWFLAKE COCO HACKATHON</span><br>"
-        "<span style='color:#94a3b8; font-size:11px;'>TRACK 5: SUPPLY CHAIN ONTOLOGY</span>",
+        """
+        <div style='background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(99, 102, 241, 0.2) 100%); 
+                    border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 8px; padding: 10px; margin-bottom: 12px;'>
+            <div style='color: #38bdf8; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;'>Snowflake CoCo Hackathon</div>
+            <div style='color: #f8fafc; font-size: 14px; font-weight: 800; margin: 2px 0;'>Team Trailblazer 🚀</div>
+            <div style='color: #94a3b8; font-size: 11px;'>Lead: <b>Tenali Radhika</b> (GCC Dev)</div>
+            <div style='color: #34d399; font-size: 10px; font-weight: 700; margin-top: 4px;'>● Track: Supply Chain Ontology & Conversational Analytics</div>
+        </div>
+        """,
         unsafe_allow_html=True
     )
     st.markdown("---")
@@ -184,7 +192,8 @@ with st.sidebar:
             "1. Command Center",
             "2. Ask OntologyOne (Governed Chat)",
             "3. Ontology Explorer",
-            "4. Trust & Lineage"
+            "4. Trust & Lineage",
+            "5. Hackathon Judge Room ⚖️"
         ],
         index=0
     )
@@ -319,3 +328,6 @@ elif screen_choice == "3. Ontology Explorer":
 
 elif screen_choice == "4. Trust & Lineage":
     render_trust_and_lineage()
+
+elif screen_choice == "5. Hackathon Judge Room ⚖️":
+    render_judge_room()
