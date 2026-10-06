@@ -1,0 +1,41 @@
+version: 1
+relationships:
+  - name: supplier_supplies_part
+    from_entity: SUPPLIER
+    to_entity: PART
+    cardinality: one_to_many
+    join_type: inner
+    condition: "SUPPLIER.supplier_id = PART.supplier_id"
+    description: "A supplier provides one or more distinct component parts."
+
+  - name: part_ordered_in_order_line
+    from_entity: PART
+    to_entity: ORDER_LINE
+    cardinality: one_to_many
+    join_type: inner
+    condition: "PART.part_id = ORDER_LINE.part_id"
+    description: "A part is specified across multiple customer order lines."
+
+  - name: plant_fulfills_order_line
+    from_entity: PLANT
+    to_entity: ORDER_LINE
+    cardinality: one_to_many
+    join_type: inner
+    condition: "PLANT.plant_id = ORDER_LINE.plant_id"
+    description: "A manufacturing plant fulfills incoming customer order lines."
+
+  - name: customer_places_order_line
+    from_entity: CUSTOMER
+    to_entity: ORDER_LINE
+    cardinality: one_to_many
+    join_type: inner
+    condition: "CUSTOMER.customer_id = ORDER_LINE.customer_id"
+    description: "A customer accounts for one or more purchase order line items."
+
+  - name: order_line_shipped_via_shipment
+    from_entity: ORDER_LINE
+    to_entity: SHIPMENT
+    cardinality: one_to_many
+    join_type: inner
+    condition: "ORDER_LINE.order_line_id = SHIPMENT.order_line_id"
+    description: "An order line item is dispatched across freight shipments."

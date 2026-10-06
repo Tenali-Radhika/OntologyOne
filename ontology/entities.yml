@@ -1,0 +1,151 @@
+version: 1
+entities:
+  - name: SUPPLIER
+    description: "Third-party commercial vendors providing raw materials and sub-components."
+    primary_key: supplier_id
+    attributes:
+      - name: supplier_id
+        type: STRING
+        description: "Unique identifier for the supplier (e.g., S-001, S-017)."
+      - name: supplier_name
+        type: STRING
+        description: "Official legal name of the vendor."
+      - name: tier
+        type: STRING
+        description: "Supplier criticality tier (Tier 1, Tier 2, Tier 3)."
+      - name: country
+        type: STRING
+        description: "Country of manufacturing operations."
+      - name: risk_level
+        type: STRING
+        description: "Calculated geopolitical and financial risk rating (Low, Medium, High, Critical)."
+    hierarchies:
+      - name: supplier_risk_rollup
+        levels: [tier, risk_level, supplier_id]
+
+  - name: PART
+    description: "Manufactured or procured inventory parts and sub-assemblies."
+    primary_key: part_id
+    attributes:
+      - name: part_id
+        type: STRING
+        description: "Global part number / SKU."
+      - name: part_name
+        type: STRING
+        description: "Standardized part description."
+      - name: category
+        type: STRING
+        description: "Product family category (Electronics, Mechanical, Fasteners, Structural)."
+      - name: unit_cost
+        type: FLOAT
+        description: "Standard piece purchase cost (Protected: confidential to non-procurement)."
+      - name: supplier_id
+        type: STRING
+        description: "Primary qualified vendor ID (Foreign Key)."
+    hierarchies:
+      - name: part_category_hierarchy
+        levels: [category, part_id]
+
+  - name: PLANT
+    description: "Internal manufacturing and assembly assembly facilities."
+    primary_key: plant_id
+    attributes:
+      - name: plant_id
+        type: STRING
+        description: "Manufacturing plant code (e.g., P01, P03, P07, P09)."
+      - name: plant_name
+        type: STRING
+        description: "Full descriptive name of manufacturing campus."
+      - name: region
+        type: STRING
+        description: "Global operational theatre (North America, EMEA, APAC)."
+      - name: country
+        type: STRING
+        description: "Country where plant is situated."
+    hierarchies:
+      - name: geographic_plant_hierarchy
+        levels: [region, country, plant_id]
+
+  - name: CUSTOMER
+    description: "Downstream purchasing enterprise clients and delivery destinations."
+    primary_key: customer_id
+    attributes:
+      - name: customer_id
+        type: STRING
+        description: "Unique client account identifier (e.g., CUST-1001)."
+      - name: customer_name
+        type: STRING
+        description: "Enterprise customer enterprise name."
+      - name: segment
+        type: STRING
+        description: "Customer revenue tier / segment (Enterprise, Strategic, Commercial)."
+      - name: region
+        type: STRING
+        description: "Customer billing and logistics destination region."
+
+  - name: ORDER_LINE
+    description: "Discrete purchase order requisition item placed by customer."
+    primary_key: order_line_id
+    attributes:
+      - name: order_line_id
+        type: STRING
+        description: "Unique line item identifier."
+      - name: order_id
+        type: STRING
+        description: "Parent purchase order requisition ID."
+      - name: part_id
+        type: STRING
+        description: "Ordered part identifier (FK to PART)."
+      - name: plant_id
+        type: STRING
+        description: "Fulfilling manufacturing plant (FK to PLANT)."
+      - name: customer_id
+        type: STRING
+        description: "Ordering customer account (FK to CUSTOMER)."
+      - name: quantity_ordered
+        type: INTEGER
+        description: "Total ordered units."
+      - name: quantity_fulfilled
+        type: INTEGER
+        description: "Total successfully dispatched units."
+      - name: order_date
+        type: DATE
+        description: "Requisition placement timestamp."
+      - name: promised_date
+        type: DATE
+        description: "Contractually committed customer arrival date."
+      - name: is_delayed_legacy
+        type: BOOLEAN
+        description: "DEPRECATED TRAP: Erroneously computed from ship date, not delivery date. DO NOT USE."
+
+  - name: SHIPMENT
+    description: "Physical outbound freight consignment dispatched to fulfill order line."
+    primary_key: shipment_id
+    attributes:
+      - name: shipment_id
+        type: STRING
+        description: "Unique bill of lading / freight tracking ID (e.g., SH-93821)."
+      - name: order_line_id
+        type: STRING
+        description: "Associated order line (FK to ORDER_LINE)."
+      - name: carrier_id
+        type: STRING
+        description: "Logistics carrier provider ID."
+      - name: lane_id
+        type: STRING
+        description: "Origin-destination transport corridor (e.g., LANE-NW-04)."
+      - name: ship_date
+        type: DATE
+        description: "Actual dock departure date."
+      - name: delivery_date
+        type: DATE
+        description: "Actual consignee receipt date."
+      - name: promised_date
+        type: DATE
+        description: "Promised customer delivery date."
+      - name: delivery_status
+        type: STRING
+        description: "Shipment outcome status (DELIVERED_ON_TIME, DELIVERED_LATE, IN_TRANSIT)."
+      - name: freight_cost
+        type: FLOAT
+        description: "Total line-haul freight expense (Masked to unauthorized personas)."

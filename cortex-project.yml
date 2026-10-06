@@ -1,0 +1,48 @@
+name: ontologyone
+version: "1.0.0"
+description: "OntologyOne: Governed Supply Chain Ontology & Conversational Analytics for Snowflake CoCo CLI Hackathon Track 5"
+
+database: ONTO_HACKATHON
+schema: CORE
+warehouse: COMPUTE_WH
+
+semantic_views:
+  - name: SUPPLY_SEMANTIC
+    path: ontology/SUPPLY_SEMANTIC.sv.yaml
+    stage: ONTO_HACKATHON.CORE.SEMANTIC_STAGE
+
+search_services:
+  - name: DOCS_SEARCH_SERVICE
+    database: ONTO_HACKATHON
+    schema: DOCS
+    target_table: ONTO_HACKATHON.DOCS.CHUNKS
+    columns:
+      id: CHUNK_ID
+      content: CONTENT
+      title: DOC_NAME
+      metadata: METADATA
+
+agents:
+  - name: ONTOLOGY_AGENT
+    path: cortex_project/agents/ontology_agent.yaml
+    model: snowflake-arctic
+    tools:
+      - type: cortex_analyst_text_to_sql
+        semantic_view: ONTO_HACKATHON.CORE.SUPPLY_SEMANTIC
+      - type: cortex_search
+        service: ONTO_HACKATHON.DOCS.DOCS_SEARCH_SERVICE
+      - type: custom_skill
+        name: metric_explainer
+        path: cortex_project/skills/metric_explainer/handler.py
+      - type: custom_skill
+        name: anomaly_narrator
+        path: cortex_project/skills/anomaly_narrator/handler.py
+      - type: custom_skill
+        name: lineage_explainer
+        path: cortex_project/skills/lineage_explainer/handler.py
+
+streamlit:
+  name: ONTOLOGYONE_APP
+  stage: ONTO_HACKATHON.CORE.STREAMLIT_STAGE
+  entry_point: app/streamlit_app.py
+  query_warehouse: COMPUTE_WH

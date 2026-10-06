@@ -1,0 +1,20 @@
+MEMORANDUM: RETIREMENT OF LEGACY SHIP-DATE METRIC & ENFORCEMENT OF OTD_V1
+TO: Global Supply Chain Analytics & Executive Committee
+FROM: Governance & Semantic Architecture Board
+DATE: January 10, 2026
+SUBJECT: Deprecation of raw_orders.is_delayed column
+
+1. BACKGROUND & PROBLEM STATEMENT:
+In legacy operational systems, delivery punctuality was historically approximated using the database column raw_orders.is_delayed. 
+Crucially, raw_orders.is_delayed evaluated whether the manufacturing plant dispatched the carton by the scheduled ship_date (dock departure), completely ignoring carrier transit dwell and customer delivery_date.
+Under this legacy formula, historical reporting artificially showed an On-Time Delivery rate of ~94.2%, while real customer dock receipt punctuality was significantly lower (~91.4%). Customers experienced late arrivals while internal reports claimed success.
+
+2. GOVERNANCE RULING:
+Effective immediately, the column raw_orders.is_delayed (and core_order_line.is_delayed_legacy) is declared DEPRECATED and strictly UNCERTIFIED.
+No analytical agent, executive dashboard, or CoCo query may utilize this column to report on-time performance.
+
+3. GOVERNED CANONICAL METRIC (OTD_V1):
+All reporting must exclusively query the certified metric contract OTD_V1:
+- Formal Definition: Delivered orders arriving at or before contractually committed arrival date (delivery_date <= promised_date).
+- Canonical Mart: ONTO_HACKATHON.MART.MART_OTD_AGGREGATE
+Any prompt querying "delayed orders" or "on-time delivery" must refuse raw_orders.is_delayed and cite OTD_V1.

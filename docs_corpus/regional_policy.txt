@@ -1,0 +1,16 @@
+STANDARD OPERATING PROCEDURE: REGIONAL CAPACITY BALANCING & FILL-RATE REMEDIATION
+Document Code: SOP-OPS-REG-04
+Applicability: North American Assembly Network (Plants P01, P03, P07, P09)
+Effective Date: February 2026
+
+§1. MANDATORY SERVICE LEVEL THRESHOLDS
+Manufacturing plants must maintain an Order Fill Rate (FR_V1) of at least 88.0% measured monthly across assigned order requisitions.
+
+§2. ROOT CAUSES FOR PLANT P03 PERFORMANCE DEFICIT
+Plant P03 (Midwest Assembly Hub) has experienced recurring inventory staging constraints, bottlenecked test bays, and supplier component starvation, resulting in chronic low fill rate (<78%). Concurrently, Plant P07 (Southeast Campus) retains 24% unutilized staging line capacity.
+
+§3. CROSS-FACILITY REALLOCATION PROTOCOL
+When an individual plant's fill rate drops below 80.0% for two consecutive 14-day cycles:
+1. Operations leadership shall initiate a Dynamic Order Reallocation.
+2. Active unstarted purchase order lines scheduled for Plant P03 must be reassigned to Plant P07.
+3. Common sub-assembly buffer components shall be transferred via expedited ground shuttle from P03 to P07 within 48 hours to restore fulfillment levels.

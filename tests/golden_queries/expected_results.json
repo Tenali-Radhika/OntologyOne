@@ -1,0 +1,31 @@
+{
+  "golden_query_1_company_q3_otd": {
+    "period": "2026-Q3",
+    "otd_rate": 91.4,
+    "status": "CERTIFIED"
+  },
+  "golden_query_2_s017_q3_performance": {
+    "supplier_id": "S-017",
+    "total_shipments": 2339,
+    "on_time_shipments": 1911,
+    "late_shipments": 428,
+    "otd_rate": 81.7
+  },
+  "golden_query_3_plant_p03_fill_rate": {
+    "plant_id": "P03",
+    "max_fill_rate_threshold": 78.0,
+    "status": "BOTTLENECK_FLAGGED"
+  },
+  "golden_query_4_freight_surcharge_lane": {
+    "lane_id": "LANE-NW-04",
+    "surcharge_ratio": 1.30,
+    "status": "CONGESTION_SURCHARGE_APPLIED"
+  },
+  "golden_query_5_three_persona_equality": {
+    "ONTO_PLANNER": 91.4,
+    "ONTO_PROCUREMENT": 91.4,
+    "ONTO_LOGISTICS": 91.4,
+    "ONTO_JUDGE": 91.4,
+    "assertion": "91.4% == 91.4% == 91.4%"
+  }
+}

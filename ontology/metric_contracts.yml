@@ -1,0 +1,79 @@
+version: 1
+contracts:
+  - id: OTD_V1
+    name: "On-Time Delivery Rate"
+    status: CERTIFIED
+    version: "1.0.0"
+    owner: "VP Global Logistics"
+    business_definition: "Percentage of delivered customer orders that arrived at or prior to the contractually agreed promised delivery date."
+    formula: "COUNT(CASE WHEN delivery_date <= promised_date THEN 1 END) / COUNT(*)"
+    grain: "Shipment / Order Line"
+    default_time_dimension: "delivery_date (2026-Q3 default window)"
+    default_aggregation: NONE
+    exclusions: "Canceled shipments, active in-transit shipments without delivery confirmation, returns"
+    source_table: "ONTO_HACKATHON.MART.MART_OTD_AGGREGATE (Aggregate Fast-Path) / ONTO_HACKATHON.CORE.CORE_SHIPMENT (Drill-Down)"
+    security_policy: "RAP-Unrestricted on MART_OTD_AGGREGATE (Unified Aggregate Truth); Entitled Row Access Policy on CORE_SHIPMENT"
+    synonyms:
+      - "OTD"
+      - "On-time delivery"
+      - "Delivery punctuality"
+      - "Delivery SLA compliance"
+      - "Customer on-time delivery rate"
+
+  - id: FR_V1
+    name: "Order Fill Rate"
+    status: CERTIFIED
+    version: "1.0.0"
+    owner: "Head of Plant Operations"
+    business_definition: "Percentage of customer ordered units successfully fulfilled and dispatched from manufacturing plants."
+    formula: "SUM(quantity_fulfilled) / SUM(quantity_ordered)"
+    grain: "Order Line"
+    default_time_dimension: "order_date"
+    default_aggregation: NONE
+    exclusions: "Order lines canceled prior to production schedule allocation"
+    source_table: "ONTO_HACKATHON.CORE.CORE_ORDER_LINE"
+    security_policy: "Standard operational role access; plant filtering applied per user region"
+    synonyms:
+      - "Fill rate"
+      - "Order fulfillment rate"
+      - "Line fill rate"
+      - "Service level"
+
+  - id: DOI_V1
+    name: "Days of Inventory"
+    status: CERTIFIED
+    version: "1.0.0"
+    owner: "Supply Chain Planning"
+    business_definition: "Estimated operational days current on-hand buffer stock can sustain projected daily customer demand."
+    formula: "SUM(current_stock_quantity) / (SUM(usage_quantity_30d) / 30.0)"
+    grain: "Part / Plant"
+    default_time_dimension: "snapshot_date"
+    default_aggregation: NONE
+    exclusions: "Obsolete or discontinued SKUs tagged inactive"
+    source_table: "ONTO_HACKATHON.CORE.CORE_INVENTORY"
+    security_policy: "Accessible to ONTO_PLANNER and ONTO_PROCUREMENT; restricted for external carrier personas"
+    synonyms:
+      - "Days of inventory"
+      - "Inventory cover"
+      - "Stock runway"
+      - "DSI"
+      - "Days sales of inventory"
+
+  - id: LC_V1
+    name: "Total Landed Cost"
+    status: CERTIFIED
+    version: "1.0.0"
+    owner: "Procurement Director"
+    business_definition: "Full delivered cost per purchased part unit, comprising base supplier purchase price plus allocated inbound freight surcharge."
+    formula: "unit_cost + (freight_cost / NULLIF(quantity_ordered, 0))"
+    grain: "Order Line / Shipment"
+    default_time_dimension: "ship_date"
+    default_aggregation: NONE
+    exclusions: "Internal manufacturing inter-plant transfer allocations"
+    source_table: "ONTO_HACKATHON.CORE.CORE_ORDER_LINE joined with ONTO_HACKATHON.CORE.CORE_SHIPMENT"
+    security_policy: "STRICT MASKING: Visible ONLY to ONTO_PROCUREMENT. Masked as '***CONFIDENTIAL***' for ONTO_LOGISTICS and unauthorized roles"
+    synonyms:
+      - "Landed cost"
+      - "Total unit cost"
+      - "Delivered piece price"
+      - "All-in part cost"

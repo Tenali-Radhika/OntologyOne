@@ -1,0 +1,65 @@
+{
+  "scenarios": [
+    {
+      "id": "S1",
+      "name": "Supplier Deterioration",
+      "flagship": true,
+      "narrative": "Supplier S-017 (MicroCore Silicon Dynamics) OTD slides from 96.2% to 81.7% over 8 weeks in Q3. Impacts plants P03, P07, P09, 17 parts, and 428 late shipments. Drives global Q3 OTD down from 94.8% to 91.4%.",
+      "anchor_shipment": "SH-93821",
+      "document_citation": "SLA_S017.pdf §4.2 (Capacity Constraint / Lead-Time Revision)",
+      "expected_metrics": {
+        "company_otd_q3": 91.4,
+        "supplier_s017_otd_q3": 81.7,
+        "s017_late_shipments": 428,
+        "impacted_plants": ["P03", "P07", "P09"],
+        "impacted_parts_count": 17
+      },
+      "prescribed_actions": [
+        "AI-generated recommendation: Trigger immediate supplier cure review with S-017 under SLA §2.2 default provisions.",
+        "AI-generated recommendation: Expedite 84 critical in-transit shipments across Plants P03, P07, and P09 via dedicated air freight.",
+        "AI-generated recommendation: Rebalance inventory buffer stock from P07 to P03."
+      ]
+    },
+    {
+      "id": "S2",
+      "name": "Plant Fill-Rate Problem",
+      "narrative": "Plant P03 suffers chronic low fill rate (<78%) while P07 retains excess line capacity.",
+      "document_citation": "regional_policy.txt §3 (Regional balancing & cross-facility allocation protocol)",
+      "expected_metrics": {
+        "p03_fill_rate": 74.2,
+        "p07_fill_rate": 93.8
+      },
+      "prescribed_actions": [
+        "AI-generated recommendation: Trigger cross-facility order reallocation from P03 to P07 per SOP-OPS-REG-04.",
+        "AI-generated recommendation: Shuttle buffer inventory from P03 to P07 within 48 hours."
+      ]
+    },
+    {
+      "id": "S3",
+      "name": "Freight Surcharge Anomaly",
+      "narrative": "Coastal Transit corridor LANE-NW-04 freight landed cost spikes +30% due to peak maritime port congestion.",
+      "document_citation": "freight_agreement.pdf §2.1 (Peak Maritime Congestion Surcharge Clause)",
+      "expected_metrics": {
+        "lane_id": "LANE-NW-04",
+        "surcharge_percent": 30.0
+      },
+      "prescribed_actions": [
+        "AI-generated recommendation: Audit bills of lading on LANE-NW-04 under contractual audit rights.",
+        "AI-generated recommendation: Shift container routing to alternative inland rail spurs."
+      ]
+    },
+    {
+      "id": "S4",
+      "name": "Definition Conflict (TRAP)",
+      "narrative": "User attempts to query legacy column raw_orders.is_delayed which falsely reports ~94% OTD based on dock dispatch date.",
+      "document_citation": "legacy_metric_memo.txt (Deprecation of ship-date metric in favor of OTD_V1)",
+      "expected_behavior": "Agent explicitly refuses raw_orders.is_delayed, explains governance rationale, and returns certified 91.4% via OTD_V1 contract."
+    },
+    {
+      "id": "S5",
+      "name": "Access Violation Attempt & Cross-Persona Consistency",
+      "narrative": "Logistics Admin attempts to query sensitive supplier pricing / unit costs.",
+      "governance_rule": "Costs masked with '***CONFIDENTIAL***'. Audit log records violation attempt. Crucially, company-level OTD query remains identical (91.4% = 91.4% = 91.4%)."
+    }
+  ]
+}

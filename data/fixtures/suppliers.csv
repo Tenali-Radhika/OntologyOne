@@ -1,0 +1,51 @@
+supplier_id,supplier_name,tier,country,risk_level
+S-001,Global Vendor 1 Corp,Tier 3,USA,Low
+S-002,Global Vendor 2 Corp,Tier 3,Japan,Low
+S-003,Global Vendor 3 Corp,Tier 1,Germany,High
+S-004,Global Vendor 4 Corp,Tier 1,South Korea,High
+S-005,Global Vendor 5 Corp,Tier 3,USA,High
+S-006,Global Vendor 6 Corp,Tier 2,USA,Low
+S-007,Global Vendor 7 Corp,Tier 1,Germany,Low
+S-008,Global Vendor 8 Corp,Tier 3,Taiwan,Low
+S-009,Global Vendor 9 Corp,Tier 3,Germany,High
+S-010,Global Vendor 10 Corp,Tier 3,South Korea,High
+S-011,Global Vendor 11 Corp,Tier 2,Germany,Medium
+S-012,Global Vendor 12 Corp,Tier 3,Japan,Low
+S-013,Global Vendor 13 Corp,Tier 1,South Korea,Medium
+S-014,Global Vendor 14 Corp,Tier 2,Japan,Low
+S-015,Global Vendor 15 Corp,Tier 1,Japan,Low
+S-016,Global Vendor 16 Corp,Tier 1,Mexico,Low
+S-017,MicroCore Silicon Dynamics,Tier 1,Germany,Critical
+S-018,Global Vendor 18 Corp,Tier 2,Japan,High
+S-019,Global Vendor 19 Corp,Tier 2,USA,High
+S-020,Global Vendor 20 Corp,Tier 2,Taiwan,Low
+S-021,Global Vendor 21 Corp,Tier 2,USA,High
+S-022,Global Vendor 22 Corp,Tier 2,South Korea,High
+S-023,Global Vendor 23 Corp,Tier 2,Taiwan,Low
+S-024,Global Vendor 24 Corp,Tier 3,USA,Low
+S-025,Global Vendor 25 Corp,Tier 3,Germany,Medium
+S-026,Global Vendor 26 Corp,Tier 1,Germany,Low
+S-027,Global Vendor 27 Corp,Tier 2,Japan,Medium
+S-028,Global Vendor 28 Corp,Tier 3,Japan,Low
+S-029,Global Vendor 29 Corp,Tier 2,Japan,Low
+S-030,Global Vendor 30 Corp,Tier 3,Japan,High
+S-031,Global Vendor 31 Corp,Tier 3,South Korea,Low
+S-032,Global Vendor 32 Corp,Tier 3,South Korea,Low
+S-033,Global Vendor 33 Corp,Tier 3,South Korea,Low
+S-034,Global Vendor 34 Corp,Tier 1,Mexico,Medium
+S-035,Global Vendor 35 Corp,Tier 2,South Korea,High
+S-036,Global Vendor 36 Corp,Tier 3,Germany,High
+S-037,Global Vendor 37 Corp,Tier 2,USA,Low
+S-038,Global Vendor 38 Corp,Tier 1,Japan,Medium
+S-039,Global Vendor 39 Corp,Tier 2,USA,Low
+S-040,Global Vendor 40 Corp,Tier 3,South Korea,Medium
+S-041,Global Vendor 41 Corp,Tier 1,South Korea,Medium
+S-042,Global Vendor 42 Corp,Tier 2,South Korea,Medium
+S-043,Global Vendor 43 Corp,Tier 1,Japan,Low
+S-044,Global Vendor 44 Corp,Tier 1,South Korea,High
+S-045,Global Vendor 45 Corp,Tier 3,Japan,High
+S-046,Global Vendor 46 Corp,Tier 3,Mexico,High
+S-047,Global Vendor 47 Corp,Tier 2,Japan,Low
+S-048,Global Vendor 48 Corp,Tier 1,Taiwan,Medium
+S-049,Global Vendor 49 Corp,Tier 1,USA,Low
+S-050,Global Vendor 50 Corp,Tier 1,South Korea,Low

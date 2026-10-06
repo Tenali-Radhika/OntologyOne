@@ -1,0 +1,348 @@
+name: SUPPLY_SEMANTIC
+description: "Governed Supply Chain Semantic View for OntologyOne — Track 5 Hackathon"
+database: ONTO_HACKATHON
+schema: CORE
+
+tables:
+  - name: MART_OTD_AGGREGATE
+    base_table:
+      database: ONTO_HACKATHON
+      schema: MART
+      table: MART_OTD_AGGREGATE
+    description: "Certified pre-aggregated On-Time Delivery rates. RAP-unrestricted fast path ensuring unified aggregate truth across all personas."
+    dimensions:
+      - name: period
+        synonyms: ["quarter", "time_window", "reporting_period"]
+        description: "Reporting calendar quarter or month (e.g., 2026-Q3)."
+        expr: period
+        data_type: VARCHAR
+      - name: supplier_id
+        synonyms: ["vendor_id", "supplier_code"]
+        description: "Unique identifier for supplier or 'ALL' for enterprise total."
+        expr: supplier_id
+        data_type: VARCHAR
+      - name: plant_id
+        synonyms: ["factory_id", "facility_code"]
+        description: "Plant identifier or 'ALL' for enterprise total."
+        expr: plant_id
+        data_type: VARCHAR
+    measures:
+      - name: certified_otd_rate
+        synonyms: ["otd", "on_time_delivery", "delivery_punctuality", "otd_v1"]
+        description: "Governed company or supplier On-Time Delivery percentage (OTD_V1 contract)."
+        expr: otd_rate
+        data_type: NUMBER
+        default_aggregation: NONE
+      - name: total_shipments
+        synonyms: ["volume", "total_orders_delivered"]
+        description: "Total delivered shipment volume in reporting period."
+        expr: total_shipments
+        data_type: NUMBER
+        default_aggregation: SUM
+      - name: on_time_shipments
+        synonyms: ["punctual_shipments"]
+        description: "Count of shipments delivered at or before promised date."
+        expr: on_time_shipments
+        data_type: NUMBER
+        default_aggregation: SUM
+
+  - name: CORE_SHIPMENT
+    base_table:
+      database: ONTO_HACKATHON
+      schema: CORE
+      table: CORE_SHIPMENT
+    description: "Granular outbound freight shipments dispatched to customers. Entitled via Row Access Policy (RAP)."
+    dimensions:
+      - name: shipment_id
+        synonyms: ["tracking_number", "bol", "freight_id"]
+        description: "Unique shipment identifier (e.g. SH-93821)."
+        expr: shipment_id
+        data_type: VARCHAR
+        unique: true
+      - name: order_line_id
+        synonyms: ["line_id"]
+        description: "Foreign key to fulfilling purchase order line item."
+        expr: order_line_id
+        data_type: VARCHAR
+      - name: carrier_id
+        synonyms: ["freight_provider", "logistics_vendor"]
+        description: "Third party logistics shipping provider."
+        expr: carrier_id
+        data_type: VARCHAR
+      - name: lane_id
+        synonyms: ["corridor", "route"]
+        description: "Logistics transit lane (e.g. LANE-NW-04)."
+        expr: lane_id
+        data_type: VARCHAR
+      - name: delivery_status
+        synonyms: ["status", "fulfillment_state"]
+        description: "Delivery outcome: DELIVERED_ON_TIME, DELIVERED_LATE, IN_TRANSIT."
+        expr: delivery_status
+        data_type: VARCHAR
+    time_dimensions:
+      - name: ship_date
+        synonyms: ["dispatch_date", "dock_date"]
+        description: "Actual departure date from manufacturing plant dock."
+        expr: ship_date
+        data_type: DATE
+      - name: delivery_date
+        synonyms: ["received_date", "customer_arrival_date"]
+        description: "Actual arrival date at customer location."
+        expr: delivery_date
+        data_type: DATE
+      - name: promised_date
+        synonyms: ["committed_date", "due_date", "sla_date"]
+        description: "Contractually committed delivery deadline."
+        expr: promised_date
+        data_type: DATE
+    measures:
+      - name: freight_cost
+        synonyms: ["shipping_cost", "freight_expense", "transit_charge"]
+        description: "Freight expense incurred for shipment. Subject to dynamic masking."
+        expr: freight_cost
+        data_type: NUMBER
+        default_aggregation: SUM
+      - name: granular_otd_rate
+        synonyms: ["line_otd", "shipment_punctuality"]
+        description: "Granular calculated OTD_V1 rate: delivered <= promised / total."
+        expr: "CASE WHEN delivery_date <= promised_date THEN 1.0 ELSE 0.0 END"
+        data_type: NUMBER
+        default_aggregation: AVG
+
+  - name: CORE_ORDER_LINE
+    base_table:
+      database: ONTO_HACKATHON
+      schema: CORE
+      table: CORE_ORDER_LINE
+    description: "Discrete customer purchase order requisitions and line item demands."
+    dimensions:
+      - name: order_line_id
+        synonyms: ["line_number"]
+        description: "Unique line item identifier."
+        expr: order_line_id
+        data_type: VARCHAR
+        unique: true
+      - name: order_id
+        synonyms: ["po_number", "requisition_id"]
+        description: "Header purchase order identifier."
+        expr: order_id
+        data_type: VARCHAR
+      - name: part_id
+        synonyms: ["sku", "component_id"]
+        description: "Foreign key to ordered part."
+        expr: part_id
+        data_type: VARCHAR
+      - name: plant_id
+        synonyms: ["manufacturing_plant", "fulfilling_facility"]
+        description: "Foreign key to fulfilling plant (e.g. P01, P03, P07, P09)."
+        expr: plant_id
+        data_type: VARCHAR
+      - name: customer_id
+        synonyms: ["client_id", "buyer_id"]
+        description: "Foreign key to ordering customer account."
+        expr: customer_id
+        data_type: VARCHAR
+      - name: is_delayed
+        synonyms: ["legacy_delayed_flag", "raw_is_delayed"]
+        description: "DEPRECATED TRAP: Uncertified legacy column computed from ship date instead of delivery date. DO NOT USE. Cite OTD_V1 instead."
+        expr: is_delayed_legacy
+        data_type: BOOLEAN
+    measures:
+      - name: quantity_ordered
+        synonyms: ["demand_units", "ordered_quantity"]
+        description: "Units requisitioned by customer."
+        expr: quantity_ordered
+        data_type: NUMBER
+        default_aggregation: SUM
+      - name: quantity_fulfilled
+        synonyms: ["shipped_units", "completed_quantity"]
+        description: "Units successfully dispatched to customer."
+        expr: quantity_fulfilled
+        data_type: NUMBER
+        default_aggregation: SUM
+      - name: fill_rate
+        synonyms: ["fr_v1", "order_fill_rate", "line_fill_percentage"]
+        description: "Certified order fill rate: fulfilled units / ordered units (FR_V1)."
+        expr: "quantity_fulfilled / NULLIF(quantity_ordered, 0)"
+        data_type: NUMBER
+        default_aggregation: NONE
+
+  - name: CORE_SUPPLIER
+    base_table:
+      database: ONTO_HACKATHON
+      schema: CORE
+      table: CORE_SUPPLIER
+    description: "Certified vendor master catalog."
+    dimensions:
+      - name: supplier_id
+        synonyms: ["vendor_code"]
+        description: "Unique supplier identifier."
+        expr: supplier_id
+        data_type: VARCHAR
+        unique: true
+      - name: supplier_name
+        synonyms: ["vendor_name", "supplier_legal_entity"]
+        description: "Standard corporate name of supplier."
+        expr: supplier_name
+        data_type: VARCHAR
+      - name: tier
+        synonyms: ["supplier_tier", "criticality"]
+        description: "Supplier classification tier (Tier 1, Tier 2, Tier 3)."
+        expr: tier
+        data_type: VARCHAR
+      - name: country
+        synonyms: ["supplier_origin", "vendor_nation"]
+        description: "Country of manufacturing operations."
+        expr: country
+        data_type: VARCHAR
+      - name: risk_level
+        synonyms: ["vendor_risk", "supplier_risk_rating"]
+        description: "Operational risk score rating (Low, Medium, High, Critical)."
+        expr: risk_level
+        data_type: VARCHAR
+
+  - name: CORE_PART
+    base_table:
+      database: ONTO_HACKATHON
+      schema: CORE
+      table: CORE_PART
+    description: "Component and SKU master catalog."
+    dimensions:
+      - name: part_id
+        synonyms: ["sku_code", "item_number"]
+        description: "Unique part number."
+        expr: part_id
+        data_type: VARCHAR
+        unique: true
+      - name: part_name
+        synonyms: ["item_name", "description"]
+        description: "Commercial description of part."
+        expr: part_name
+        data_type: VARCHAR
+      - name: category
+        synonyms: ["commodity_group", "part_family"]
+        description: "Part category (Electronics, Mechanical, Fasteners, Structural)."
+        expr: category
+        data_type: VARCHAR
+      - name: supplier_id
+        synonyms: ["primary_vendor"]
+        description: "Assigned manufacturing vendor ID."
+        expr: supplier_id
+        data_type: VARCHAR
+    measures:
+      - name: unit_cost
+        synonyms: ["purchase_price", "piece_price", "bom_cost"]
+        description: "Standard piece procurement price. Masked to unauthorized roles."
+        expr: unit_cost
+        data_type: NUMBER
+        default_aggregation: AVG
+
+  - name: CORE_PLANT
+    base_table:
+      database: ONTO_HACKATHON
+      schema: CORE
+      table: CORE_PLANT
+    description: "Enterprise manufacturing facilities."
+    dimensions:
+      - name: plant_id
+        synonyms: ["facility_id", "plant_code"]
+        description: "Plant identifier (e.g. P01, P03, P07, P09)."
+        expr: plant_id
+        data_type: VARCHAR
+        unique: true
+      - name: plant_name
+        synonyms: ["facility_name", "site_name"]
+        description: "Manufacturing facility campus name."
+        expr: plant_name
+        data_type: VARCHAR
+      - name: region
+        synonyms: ["operating_region", "geography"]
+        description: "Operational geography (North America, EMEA, APAC)."
+        expr: region
+        data_type: VARCHAR
+
+relationships:
+  - name: part_to_supplier
+    left_table: CORE_PART
+    right_table: CORE_SUPPLIER
+    join_type: inner
+    relationship_type: many_to_one
+    relationship_columns:
+      - left_column: supplier_id
+        right_column: supplier_id
+
+  - name: order_line_to_part
+    left_table: CORE_ORDER_LINE
+    right_table: CORE_PART
+    join_type: inner
+    relationship_type: many_to_one
+    relationship_columns:
+      - left_column: part_id
+        right_column: part_id
+
+  - name: order_line_to_plant
+    left_table: CORE_ORDER_LINE
+    right_table: CORE_PLANT
+    join_type: inner
+    relationship_type: many_to_one
+    relationship_columns:
+      - left_column: plant_id
+        right_column: plant_id
+
+  - name: shipment_to_order_line
+    left_table: CORE_SHIPMENT
+    right_table: CORE_ORDER_LINE
+    join_type: inner
+    relationship_type: many_to_one
+    relationship_columns:
+      - left_column: order_line_id
+        right_column: order_line_id
+
+verified_queries:
+  - name: overall_q3_otd
+    question: "What was our overall company On-Time Delivery Rate in Q3 2026?"
+    verified_at: 1728250000
+    verified_by: "VP Global Logistics"
+    sql: "SELECT otd_rate FROM ONTO_HACKATHON.MART.MART_OTD_AGGREGATE WHERE period = '2026-Q3' AND supplier_id = 'ALL' AND plant_id = 'ALL';"
+
+  - name: s17_supplier_otd
+    question: "What is the On-Time Delivery Rate for supplier S-017 in Q3 2026?"
+    verified_at: 1728250000
+    verified_by: "Procurement Director"
+    sql: "SELECT otd_rate FROM ONTO_HACKATHON.MART.MART_OTD_AGGREGATE WHERE period = '2026-Q3' AND supplier_id = 'S-017';"
+
+  - name: plant_p03_fill_rate
+    question: "What is the order fill rate for manufacturing plant P03?"
+    verified_at: 1728250000
+    verified_by: "Head of Operations"
+    sql: "SELECT SUM(quantity_fulfilled) / SUM(quantity_ordered) AS fill_rate FROM ONTO_HACKATHON.CORE.CORE_ORDER_LINE WHERE plant_id = 'P03';"
+
+  - name: late_shipments_s017
+    question: "How many late shipments were associated with supplier S-017 in Q3 2026?"
+    verified_at: 1728250000
+    verified_by: "VP Global Logistics"
+    sql: "SELECT COUNT(s.shipment_id) AS late_shipment_count FROM ONTO_HACKATHON.CORE.CORE_SHIPMENT s JOIN ONTO_HACKATHON.CORE.CORE_ORDER_LINE o ON s.order_line_id = o.order_line_id JOIN ONTO_HACKATHON.CORE.CORE_PART p ON o.part_id = p.part_id WHERE p.supplier_id = 'S-017' AND s.delivery_date > s.promised_date AND s.delivery_date BETWEEN '2026-07-01' AND '2026-09-30';"
+
+  - name: impacted_plants_s017
+    question: "Which manufacturing plants were impacted by delayed parts from supplier S-017?"
+    verified_at: 1728250000
+    verified_by: "Supply Chain Analyst"
+    sql: "SELECT DISTINCT o.plant_id FROM ONTO_HACKATHON.CORE.CORE_SHIPMENT s JOIN ONTO_HACKATHON.CORE.CORE_ORDER_LINE o ON s.order_line_id = o.order_line_id JOIN ONTO_HACKATHON.CORE.CORE_PART p ON o.part_id = p.part_id WHERE p.supplier_id = 'S-017' AND s.delivery_date > s.promised_date ORDER BY o.plant_id;"
+
+  - name: lane_freight_surcharge
+    question: "What is the average freight cost and landed cost for lane LANE-NW-04?"
+    verified_at: 1728250000
+    verified_by: "Procurement Director"
+    sql: "SELECT AVG(freight_cost) AS avg_freight_cost FROM ONTO_HACKATHON.CORE.CORE_SHIPMENT WHERE lane_id = 'LANE-NW-04';"
+
+  - name: trap_column_avoidance
+    question: "Why should we not use raw_orders.is_delayed for calculating OTD?"
+    verified_at: 1728250000
+    verified_by: "Governance Committee"
+    sql: "SELECT 'REFUSED: raw_orders.is_delayed violates OTD_V1 metric contract. Certified formula requires delivery_date <= promised_date.' AS governance_ruling;"
+
+  - name: cross_persona_consistency_proof
+    question: "Verify company Q3 OTD is identical across ONTO_PLANNER, ONTO_PROCUREMENT, and ONTO_LOGISTICS"
+    verified_at: 1728250000
+    verified_by: "Lead Hackathon Judge"
+    sql: "SELECT period, otd_rate, '91.4%' AS contract_target FROM ONTO_HACKATHON.MART.MART_OTD_AGGREGATE WHERE period = '2026-Q3' AND supplier_id = 'ALL' AND plant_id = 'ALL';"

@@ -1,0 +1,13 @@
+plant_id,plant_name,region,country
+P01,Midwest Auto Stamping,North America,USA
+P02,Great Lakes Powertrain,North America,USA
+P03,Midwest Advanced Assembly,North America,USA
+P04,Texas Heavy Assembly,North America,USA
+P05,Ontario Precision Modules,North America,Canada
+P06,Bavaria Mechatronics,EMEA,Germany
+P07,Southeast Integration Campus,North America,USA
+P08,Lyon Propulsion Systems,EMEA,France
+P09,Pacific Precision Works,North America,USA
+P10,Tokyo Robotics Fabrication,APAC,Japan
+P11,Singapore Micro-Assembly,APAC,Singapore
+P12,Nuevo Leon Sub-Assembly,North America,Mexico
