@@ -324,10 +324,15 @@ def create_overlay():
         c.drawString(55, y_text, stext)
         y_text -= 12.5
 
-    # Closing Tagline
-    c.setFont("Helvetica-BoldOblique", 8.5)
-    c.setFillColor(colors.HexColor("#0369a1"))
-    c.drawCentredString(WIDTH / 2.0, 95, '"We didn\'t teach an AI what the truth is. We gave the AI a governed definition of truth." — Team Trailblazer')
+    # Live Prototype Links & Closing Tagline
+    c.setFont("Helvetica-Bold", 8)
+    c.setFillColor(colors.HexColor("#0284c7"))
+    c.drawCentredString(WIDTH / 2.0, 98, "Live Prototype: https://app.snowflake.com/hmocsic/it35588/#/streamlit-apps/SNOWFLAKE_LEARNING_DB.PUBLIC.ONTOLOGYONE")
+    c.drawCentredString(WIDTH / 2.0, 86, "GitHub Repository: https://github.com/Tenali-Radhika/OntologyOne")
+
+    c.setFont("Helvetica-BoldOblique", 7.5)
+    c.setFillColor(colors.HexColor("#475569"))
+    c.drawCentredString(WIDTH / 2.0, 72, '"We didn\'t teach an AI what the truth is. We gave the AI a governed definition of truth." — Team TrailBlazer')
 
     c.showPage()
     c.save()
