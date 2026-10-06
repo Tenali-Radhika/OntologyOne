@@ -155,7 +155,7 @@ def get_governed_evidence(prompt: str, persona: str) -> dict:
         }
 
     # S5 Access Violation: Cost request by non-procurement persona
-    if any(k in prompt_lower for k in ["cost", "price", "spend"]) and ("Procurement" not in persona and "Judge" not in persona):
+    if any(k in prompt_lower for k in ["cost", "price", "spend"]) and ("Procurement" not in persona):
         return {
             "title": "SECURITY POLICY ENFORCEMENT: Financial Attributes Redacted",
             "narrative": (
@@ -172,7 +172,7 @@ def get_governed_evidence(prompt: str, persona: str) -> dict:
                 {
                     "doc": "governance_policy.md",
                     "title": "RBAC Data Entitlement Spec",
-                    "excerpt": "Direct procurement financial piece pricing is exclusively restricted to ONTO_PROCUREMENT and ONTO_JUDGE roles."
+                    "excerpt": "Direct procurement financial piece pricing is exclusively restricted to ONTO_PROCUREMENT role."
                 }
             ],
             "recommendations": [
@@ -310,11 +310,11 @@ with st.sidebar:
     st.markdown(
         """
         <div style='background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(99, 102, 241, 0.2) 100%); 
-                    border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 8px; padding: 10px; margin-bottom: 12px;'>
-            <div style='color: #38bdf8; font-size: 11px; font-weight: 800; text-transform: uppercase;'>Snowflake CoCo Hackathon</div>
-            <div style='color: #f8fafc; font-size: 14px; font-weight: 800; margin: 2px 0;'>Team TrailBlazer 🚀</div>
-            <div style='color: #94a3b8; font-size: 11px;'>Lead: <b>Tenali Radhika</b> (Size: 2)</div>
-            <div style='color: #34d399; font-size: 10px; font-weight: 700; margin-top: 4px;'>● Track 5: Supply Chain Ontology</div>
+                    border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 8px; padding: 12px; margin-bottom: 12px;'>
+            <div style='color: #38bdf8; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;'>Enterprise Intelligence</div>
+            <div style='color: #f8fafc; font-size: 15px; font-weight: 800; margin: 2px 0;'>OntologyOne Core</div>
+            <div style='color: #cbd5e1; font-size: 12px;'>Governed Semantic Engine</div>
+            <div style='color: #34d399; font-size: 11px; font-weight: 700; margin-top: 4px;'>● Cortex AI Connected</div>
         </div>
         """,
         unsafe_allow_html=True
@@ -327,8 +327,7 @@ with st.sidebar:
         [
             "Demand Planner (ONTO_PLANNER)",
             "Procurement Lead (ONTO_PROCUREMENT)",
-            "Logistics Admin (ONTO_LOGISTICS)",
-            "Hackathon Judge (ONTO_JUDGE)"
+            "Logistics Admin (ONTO_LOGISTICS)"
         ],
         index=0
     )
@@ -341,8 +340,7 @@ with st.sidebar:
             "1. Command Center",
             "2. Ask OntologyOne (Governed Chat)",
             "3. Ontology Explorer",
-            "4. Trust & Lineage",
-            "5. Hackathon Judge Room ⚖️"
+            "4. Trust & Lineage"
         ],
         index=0
     )
@@ -399,7 +397,7 @@ if screen_choice == "1. Command Center":
             unsafe_allow_html=True
         )
     with c4:
-        is_proc = ("Procurement" in persona_choice) or ("Judge" in persona_choice)
+        is_proc = ("Procurement" in persona_choice)
         cost_val = "$184.20" if is_proc else "***CONFIDENTIAL***"
         cost_sub = "Unmasked (Authorized Role)" if is_proc else "Masked by GOV.MASK_COST_DATA"
         st.markdown(
@@ -631,67 +629,3 @@ elif screen_choice == "4. Trust & Lineage":
                 st.write(f"**Grain:** `{grain}` | **Owner:** `{own}`")
                 st.write(f"**Source Table / Security:** `{src}`")
 
-elif screen_choice == "5. Hackathon Judge Room ⚖️":
-    st.markdown("## ⚖️ Hackathon Judge Evaluation Room")
-    st.markdown(
-        """
-        <div style='background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(56, 189, 248, 0.15) 100%); 
-                    border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 12px; padding: 16px; margin-bottom: 20px;'>
-            <div style='display: flex; justify-content: space-between; align-items: center;'>
-                <div>
-                    <span style='background: #38bdf8; color: #0f172a; font-weight: 800; padding: 2px 10px; border-radius: 20px; font-size: 11px;'>
-                        SNOWFLAKE COCO HACKATHON
-                    </span>
-                    <h3 style='margin: 8px 0 4px 0; color: #f8fafc;'>Team TrailBlazer — Tenali Radhika</h3>
-                    <p style='margin: 0; color: #cbd5e1; font-size: 13px;'>
-                        <b>Challenge:</b> Track 5 — Supply Chain Ontology & Governed Conversational Analytics
-                    </p>
-                </div>
-                <div style='text-align: right;'>
-                    <div style='font-size: 28px; font-weight: 900; color: #34d399;'>100%</div>
-                    <div style='color: #94a3b8; font-size: 11px;'>RUBRIC ALIGNED</div>
-                </div>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-    
-    t1, t2 = st.tabs(["⚡ 1-Click Interactive Proofs", "🎤 2-Minute Winning Pitch Script"])
-    with t1:
-        st.markdown("#### Test Live Architectural Gates:")
-        c1, c2 = st.columns(2)
-        with c1:
-            if st.button("Gate 1: Verify Three-Persona OTD Invariance (91.4% = 91.4% = 91.4%)", use_container_width=True):
-                st.success("ASSERTION PASSED: Demand Planner (91.4%) == Procurement Lead (91.4%) == Logistics Admin (91.4%) == Judge (91.4%)")
-                st.info("Verified against MART_OTD_AGGREGATE (RAP-unrestricted certified fast-path mart).")
-            if st.button("Gate 2: Verify S1 Root Cause Decomposition (Supplier S-017)", use_container_width=True):
-                st.success("CAUSAL FINDING: S-017 OTD crashed 96.2% -> 81.7%. Affected Plants P03, P07, P09, 17 parts, 428 late shipments.")
-                st.caption("Drill shipment SH-93821 (Promised 2026-08-15, Delivered 2026-08-19). Cited SLA_S017.pdf §4.2.")
-        with c2:
-            if st.button("Gate 3: Verify S4 Legacy Column Refusal (raw_orders.is_delayed)", use_container_width=True):
-                st.warning("GOVERNANCE REFUSAL: Column raw_orders.is_delayed rejected as uncertified trap. Governed OTD_V1 enforced (91.4%).")
-            if st.button("Gate 4: Verify S5 Cost Masking (***CONFIDENTIAL***)", use_container_width=True):
-                st.info("MASKING ENFORCED: GOV.MASK_COST_DATA redacted unit_cost for ONTO_LOGISTICS persona; violation logged.")
-
-        pitch_text = (
-            "> **[0:00 - The Hook]**\n"
-            "> 'Good day judges. In every enterprise GCC, executive dashboards report conflicting truths. "
-            "Ask three department heads \"What is our On-Time Delivery rate?\" and Procurement says 94%, "
-            "Logistics says 89%, and Planning says 92%. When row-level security is applied, standard LLM queries "
-            "calculate different numbers. We call this the RAP Paradox.'\n>\n"
-            "> **[0:40 - The Breakthrough]**\n"
-            "> 'Team TrailBlazer built OntologyOne to solve this permanently. Our thesis: Same question, same governed metric, "
-            "same calculation, same answer, different authorized context. We introduced the Two-Tier Truth Architecture: "
-            "Unified Aggregate Truth in a certified mart where Q3 OTD is invariant at 91.4% across all personas, coupled with "
-            "Entitled Granular Lineage for compliant drill-downs.'\n>\n"
-            "> **[1:15 - The Snowflake AI Stack]**\n"
-            "> 'Powered by Snowflake Cortex Agent, Cortex Analyst, and Cortex Search, our Truth Compiler translates natural "
-            "language into verified semantic view SQL. When investigating why OTD fell, it does not just calculate a number—it decomposes "
-            "the ontology to Supplier S-017, pinpoints 428 late shipments, cites the Dresden Fab wafer delay in SLA clause Section 4.2, "
-            "and presents labeled AI recommendations.'\n>\n"
-            "> **[1:45 - The Closer]**\n"
-            "> 'Our test suite passes 12 out of 12 governance gates. We did not teach an AI what the truth is. "
-            "We gave the AI a governed definition of truth. We are Team TrailBlazer. Thank you.'"
-        )
-        st.markdown(pitch_text)
